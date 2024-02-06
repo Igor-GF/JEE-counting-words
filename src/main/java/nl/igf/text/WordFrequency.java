@@ -1,4 +1,4 @@
-package nl.igf.tekst;
+package nl.igf.text;
 
 public interface WordFrequency {
     String getWord();

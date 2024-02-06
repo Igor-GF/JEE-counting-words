@@ -1,6 +1,7 @@
-package nl.igf.tekst;
+package nl.igf.model;
 
 import lombok.Value;
+import nl.igf.text.WordFrequency;
 
 @Value
 public class SingleWordFrequency implements WordFrequency {

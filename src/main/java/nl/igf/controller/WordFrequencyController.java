@@ -1,7 +1,7 @@
 package nl.igf.controller;
 
-import nl.igf.tekst.WordFrequency;
-import nl.igf.tekst.WordFrequencyData;
+import nl.igf.service.WordFrequencyService;
+import nl.igf.text.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ import java.util.List;
 @RequestMapping("/api")
 public class WordFrequencyController {
     @Autowired
-    private WordFrequencyData wordFrequencyData;
+    private WordFrequencyService wordFrequencyService;
 
     @GetMapping("/highest-frequency")
-    public ResponseEntity<Integer> calculateHighestFrequency(@RequestParam String text) {
+    public ResponseEntity<Integer> calculateHighestFrequency(@RequestParam String tekst) {
         return new ResponseEntity<>(
-                this.wordFrequencyData.calculateHighestFrequency(text),
+                this.wordFrequencyService.calculateHighestFrequency(tekst),
                 HttpStatus.OK
         );
     }
@@ -31,7 +31,7 @@ public class WordFrequencyController {
         @RequestParam String tekst, @RequestParam String woord
     ) {
         return new ResponseEntity<>(
-                this.wordFrequencyData.calculateFrequencyForWord(tekst, woord),
+                this.wordFrequencyService.calculateFrequencyForWord(tekst, woord),
                 HttpStatus.OK
         );
     }
@@ -41,7 +41,7 @@ public class WordFrequencyController {
         @RequestParam String tekst, @RequestParam int aantal
     ) {
         return new ResponseEntity<> (
-                this.wordFrequencyData.calculateMostFrequentNWords(tekst, aantal),
+                this.wordFrequencyService.calculateMostFrequentNWords(tekst, aantal),
                 HttpStatus.OK
         );
     }
