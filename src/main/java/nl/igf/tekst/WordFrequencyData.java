@@ -1,7 +1,10 @@
 package nl.igf.tekst;
 
+import org.springframework.stereotype.Service;
+
 import java.util.*;
 
+@Service
 public class WordFrequencyData implements WordFrequencyAnalyzer {
     private final List<SingleWordFrequency> lijst = new ArrayList<>();
 
