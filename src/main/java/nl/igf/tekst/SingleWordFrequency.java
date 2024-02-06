@@ -1,24 +1,11 @@
 package nl.igf.tekst;
 
-import jdk.jfr.DataAmount;
+import lombok.Value;
 
-@Data
-public final class SingleWordFrequency implements WordFrequency {
-    private String word;
-    private int frequency;
-
-    public SingleWordFrequency(String word, int frequency) {
-        this.word = word;
-        this.frequency = frequency;
-    }
-
-    public String getWord() {
-        return word;
-    }
-
-    public int getFrequency() {
-        return frequency;
-    }
+@Value
+public class SingleWordFrequency implements WordFrequency {
+    String word;
+    int frequency;
 
     @Override
     public String toString() {
