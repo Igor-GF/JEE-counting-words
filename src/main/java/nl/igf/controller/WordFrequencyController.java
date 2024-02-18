@@ -5,10 +5,7 @@ import nl.igf.text.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,29 +16,29 @@ public class WordFrequencyController {
     private WordFrequencyService wordFrequencyService;
 
     @GetMapping("/highest-frequency")
-    public ResponseEntity<Integer> calculateHighestFrequency(@RequestParam String tekst) {
+    public ResponseEntity<Integer> calculateHighestFrequency(@RequestParam String text) {
         return new ResponseEntity<>(
-                this.wordFrequencyService.calculateHighestFrequency(tekst),
+                this.wordFrequencyService.calculateHighestFrequency(text),
                 HttpStatus.OK
         );
     }
 
     @GetMapping("/frequency-for-word")
     public ResponseEntity<Integer> calculateFrequencyForWord(
-        @RequestParam String tekst, @RequestParam String woord
+        @RequestParam String text, @RequestParam String word
     ) {
         return new ResponseEntity<>(
-                this.wordFrequencyService.calculateFrequencyForWord(tekst, woord),
+                this.wordFrequencyService.calculateFrequencyForWord(text, word),
                 HttpStatus.OK
         );
     }
 
     @GetMapping("/most-frequent-words")
     public ResponseEntity<List<WordFrequency>> calculateMostFrequentNWords(
-        @RequestParam String tekst, @RequestParam int aantal
+        @RequestParam String text, @RequestParam int numberOfWords
     ) {
         return new ResponseEntity<> (
-                this.wordFrequencyService.calculateMostFrequentNWords(tekst, aantal),
+                this.wordFrequencyService.calculateMostFrequentNWords(text, numberOfWords),
                 HttpStatus.OK
         );
     }

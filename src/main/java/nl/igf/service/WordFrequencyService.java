@@ -1,74 +1,54 @@
 package nl.igf.service;
 
-import nl.igf.model.SingleWordFrequency;
-import nl.igf.text.WordFrequency;
-import nl.igf.text.WordFrequencyAnalyzer;
+import nl.igf.model.WordFrequencyImpl;
+import nl.igf.text.*;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class WordFrequencyService implements WordFrequencyAnalyzer {
-    private final List<SingleWordFrequency> lijst = new ArrayList<>();
+    private TreeSet<WordFrequencyImpl> wordFrequencySet;
 
     @Override
-    public int calculateHighestFrequency(String tekst) {
-        setFrequencyList(tekst);
+    public int calculateHighestFrequency(String text) {
+        makeTreeSet(text);
 
-        return lijst.stream()
-                .mapToInt(SingleWordFrequency::getFrequency)
-                .reduce(0, Math::max);
-    }
-
-    @Override
-    public int calculateFrequencyForWord(String tekst, String woord) {
-        setFrequencyList(tekst);
-        int frequency = 0;
-
-        for (SingleWordFrequency wf : lijst) {
-            if (woord.equals(wf.getWord())) {
-                frequency = wf.getFrequency();
-                break;
-            };
-        }
-        return frequency;
+        // get first wordFrequency from the sorted TreeSet
+        return wordFrequencySet.first().getFrequency();
     }
 
     @Override
-    public List<WordFrequency> calculateMostFrequentNWords(String tekst, int aantal) {
-        setFrequencyList(tekst);
+    public int calculateFrequencyForWord(String text, String word) {
+        makeTreeSet(text);
 
-        return lijst.stream()
-                .sorted(Comparator
-                        .comparingInt(WordFrequency::getFrequency).reversed()
-                        .thenComparing(WordFrequency::getWord))
-                .limit(aantal)
-                .map(wf -> (WordFrequency) wf)// only for casting
-                .toList();
+        return wordFrequencySet.stream()
+                .filter(wf -> wf.getWord().equals(word))
+                .mapToInt(WordFrequencyImpl::getFrequency)
+                .findFirst()
+                .orElse(0);
     }
 
-    private void setFrequencyList(String tekst) {
-        ArrayList<String> woorden = createListFromText(tekst);
-        Map<String, Integer> freqMap = new HashMap<>();
+    @Override
+    public List<WordFrequency> calculateMostFrequentNWords(String text, int numberOfWords) {
+        makeTreeSet(text);
 
-        // get a list of unique words
-        woorden.forEach(w -> freqMap.put(w, Collections.frequency(woorden, w)));
-
-        // add to lijst field
-        lijst.clear();
-        for (Map.Entry<String, Integer> entry : freqMap.entrySet()) {
-            lijst.add(new SingleWordFrequency(
-                    entry.getKey(),
-                    entry.getValue()
-            ));
-        }
+        // since wordFrequencies is sorted we can return the first n elements
+        return wordFrequencySet.stream()
+                .limit(numberOfWords)
+                .collect(Collectors.toList());
     }
 
-    private ArrayList<String> createListFromText(String tekst) {
-        String[] woordenArray = tekst.toLowerCase().trim().split("[^a-z]+");
-        ArrayList<String> woordenLijst = new ArrayList<>();
+    private void makeTreeSet(String text) {
+        ArrayList<String> words = createListFromText(text);
 
-        woordenLijst.addAll(Arrays.asList(woordenArray));
-        return woordenLijst;
+        wordFrequencySet = new TreeSet<>();
+        words.forEach(w -> wordFrequencySet.add(new WordFrequencyImpl(w, Collections.frequency(words, w))));
+        wordFrequencySet = (TreeSet<WordFrequencyImpl>) wordFrequencySet.descendingSet();
+    }
+
+    private ArrayList<String> createListFromText(String text) {
+        String[] wordArray = text.toLowerCase().trim().split("[^a-z]+");
+        return new ArrayList<>(Arrays.asList(wordArray));
     }
 }
