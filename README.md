@@ -14,15 +14,15 @@ Execute the CountingWordsMain, and Spring will serve at http://localhost:8080
 Using a web API application tester, such as Insomnia or Postman, you can test the following endpoints:
 
 /api/highest-frequency
-    - Query parameter: tekst (expect a text as value)
+    - Query parameter: text (expect a text as value)
 
 /api/most-frequent-words
-    - Query parameter: tekst (expect a text as value)
-    - Query parameter: woord (expect a word as value)
+    - Query parameter: text (expect a text as value)
+    - Query parameter: word (expect a word as value)
 
 /api/frequency-for-word
-    - Query parameter: tekst (expect a text as value)
-    - Query parameter: aantal (expect a number as value)
+    - Query parameter: text (expect a text as value)
+    - Query parameter: numberOfWords (expect a number as value)
 
 ## author
 [Igor Figueiredo](https://github.com/Igor-GF)
